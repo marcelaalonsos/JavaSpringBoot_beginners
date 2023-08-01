@@ -1,0 +1,79 @@
+NOTES
+
+1. SPRING INITIALIZER
+- go to start.spring.io
+- select Maven as a Project, and Java as a language
+- select Spring Boot version 3.1.2
+- Metadata:
+group: com.telusko
+artifact: quizapp
+description: Telusko Quiz App
+
+- select JAR for packaging
+- select Java 17
+- for dependencies:
+Spring web
+PostgreSQL Driver
+Spring Data JPA
+Lombok
+
+- click generate and it will download a zip folder
+- open folder in IDE
+
+2. PostgreSQL database
+- open pgAdmin4 to enable PostgreSQL use
+- create a new database called questiondb
+- create a table called question
+- add 6 columns id(as pk), category, difficultylevel, option1, option2, option3
+- in the properties of the id column, in constraints, select primary key and not null to yes, and in the type select identity, identity as always, and increment 1
+- each column has the following type: integer, character varying,  character varying, character varying, character varying, character varying
+- to add rows into the table, right click on the table and select scripts/ insert scripts
+- because the id is primary key and auto increments, we can delete the first ?, then fill in the rest with the required data
+
+3. create the question controller
+- in src/main/java/com/telusko/quizapp is where we will create the REST controller
+- create a new class Called QuestionController
+- in the header annotate @RESTController and @RequestMapping("question")
+- inside the class, we will create a method to get all the questions
+- annotate the method with @GetMapping("allQuestions)
+- the method for now will return a string
+public String getAllQuestions() {
+  return "Hi, These are your questions";
+}
+
+- in the resources folder, we will edit the application properties
+- add the following code:
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.datasource.url=jdbc:postgresql://localhost:5432/questiondb
+spring.datasource.username=postgres
+spring.datasource.password=admin
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+
+4. fetch the questions from the db
+- in the QuestionController file, inside the class we are going to the return the service layer from the method
+- make a reference to the service by adding QuestionService questionService inside the class before all the methods
+- annotate that reference with @Autowired
+- note that the service returns an entity with is a model
+- the getAllQuestions method returns a List<Question> question is the model we created
+
+
+5. Question model class
+- in the project folder, create a file called Question.java
+- this will be our model, and will have properties that match the columns of the table in the database
+- for the id property, we need to annotate it as @Id so it know it is a primary key, and @GeneratedValue(strategy = GenerationType.SEQUENCE)
+- annotate the class as @Entity, and @Data
+
+6. Question service class
+- in the service class, annotate the class as @Service so the framework knows how to handle it
+- inside the class, create a method that will fetch all the questions
+- before the method, create a reference to the Dao (Repository) QuestionDao questionDao; and annotate it as @Autowired
+
+7. Question Dao
+- create a file called QuestionDao.java in the project folder
+- annotate @Repository in the header of the file
+-
+
+
+
+
