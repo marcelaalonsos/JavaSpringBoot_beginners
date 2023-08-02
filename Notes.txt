@@ -68,11 +68,24 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 - in the service class, annotate the class as @Service so the framework knows how to handle it
 - inside the class, create a method that will fetch all the questions
 - before the method, create a reference to the Dao (Repository) QuestionDao questionDao; and annotate it as @Autowired
+- the method returns question.findAll();
 
 7. Question Dao
 - create a file called QuestionDao.java in the project folder
 - annotate @Repository in the header of the file
--
+- the interface should extends JpaRepository, the JpaRepository asks for 2 things, 1. is the object we are working with - in this case Question, and 2. what is the kind of primary key, which is an integer:
+public interface QuestionDao extends JpaRepository<Question, Integer> {
+}
+
+8. Fetching questions by category
+- in the question controller, create a @GetMapping("category/{category}) method called getQuestionsByCategory(@PathVariable String category)
+- the method will return a method from the question service of the same name, passing category as an argument
+- in the question service file we'll create a method of the same name that will return a query from the dao file
+  public List<Question> getQuestionsByCategory(String category) {
+    return questionDao.findByCategory(category);
+  }
+- however, since we're fetching from a column and not a primary key, we'll have to create a custom method in the dao file
+- in the dao file, inside the interface, we return List<Question> findByCategory(String category);
 
 
 
