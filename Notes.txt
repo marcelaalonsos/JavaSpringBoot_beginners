@@ -87,6 +87,21 @@ public interface QuestionDao extends JpaRepository<Question, Integer> {
 - however, since we're fetching from a column and not a primary key, we'll have to create a custom method in the dao file
 - in the dao file, inside the interface, we return List<Question> findByCategory(String category);
 
+9. Adding a question
+- in the question controller file, we will add a method to addQuestion
+- as a paremeter, the method will take Question question -which is the model
+- it should be annotated as @RequestBody because you are requesting the data from the body
+- how do we add it to the database? well, we have a method in the questionService called addQuestion
+- it should return questionService.addQuestion(question);
+- before the method, it should be annotated with @PostMapping("add")
+
+10. addQuestion method in the service
+  public String addQuestion(Question question) {
+    questionDao.save(question);
+    return "success";
+  }
+- .save is a built in method from the dao
+
 
 
 
